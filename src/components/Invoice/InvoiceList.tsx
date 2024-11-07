@@ -1,47 +1,50 @@
 import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { mockInvoices } from '../../__mocks__/InvoiceData'
 import type { Invoice } from '../../hooks/useInvoices'
 import InvoiceModal from './InvoiceModal'
+import { 
+  setInvoices, 
+  setError, 
+  setSelectedInvoice,
+  setCheckedInvoices,
+  clearCheckedInvoices
+} from '../../store/invoiceSlice'
+import type { RootState } from '../../store/store'
 
 // During development, set to True to use mockdata.
-// Normally use an environment variable and this is set to false in production.
 const inDevelopment = true
 
 const InvoiceList = () => {
+  const dispatch = useDispatch()
+  const { invoices, isLoading, error, selectedInvoice, checkedInvoices } = 
+    useSelector((state: RootState) => state.invoice)
+  
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set())
   const [headerChecked, setHeaderChecked] = useState(false)
-  const [invoices, setInvoices] = useState<Invoice[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  
+
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
         if (inDevelopment) {
           if (!mockInvoices || mockInvoices.length === 0) {
-            setError('You are in Development mode, but data is missing from the mockdata file')
-            setIsLoading(false)
+            dispatch(setError('You are in Development mode, but data is missing from the mockdata file'))
             return
           }
-          setInvoices(mockInvoices)
-          setIsLoading(false)
+          dispatch(setInvoices(mockInvoices))
           return
         }
-        setError('Data could not be loaded. Please contact support.')
-        setIsLoading(false)
+        dispatch(setError('Data could not be loaded. Please contact support.'))
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to load invoices. Please try again later.'
-        setError(errorMessage)
-        setIsLoading(false)
+        dispatch(setError(errorMessage))
       }
     }
 
     fetchInvoices()
-  }, [])
+  }, [dispatch])
 
   // Calculate pagination
   const indexOfLastItem = currentPage * itemsPerPage
@@ -53,25 +56,23 @@ const InvoiceList = () => {
   const handleHeaderCheckboxChange = (checked: boolean) => {
     setHeaderChecked(checked)
     if (checked) {
-      // Check all current items
-      const newCheckedItems = new Set(checkedItems)
-      currentItems.forEach(item => newCheckedItems.add(item.id))
-      setCheckedItems(newCheckedItems)
+      const newCheckedItems = Array.from(checkedInvoices)
+      currentItems.forEach(item => newCheckedItems.push(item.id))
+      dispatch(setCheckedInvoices(newCheckedItems))
     } else {
-      // Uncheck all items
-      setCheckedItems(new Set())
+      dispatch(clearCheckedInvoices())
     }
   }
 
   // Handle individual checkbox change
   const handleItemCheckboxChange = (checked: boolean, invoiceId: string) => {
-    const newCheckedItems = new Set(checkedItems)
+    const newCheckedItems = new Set(checkedInvoices)
     if (checked) {
       newCheckedItems.add(invoiceId)
     } else {
       newCheckedItems.delete(invoiceId)
     }
-    setCheckedItems(newCheckedItems)
+    dispatch(setCheckedInvoices(Array.from(newCheckedItems)))
     
     // Update header checkbox state
     const allCurrentChecked = currentItems.every(item => newCheckedItems.has(item.id))
@@ -86,7 +87,7 @@ const InvoiceList = () => {
 
   // Handle row click
   const handleRowClick = (invoice: Invoice) => {
-    setSelectedInvoice(invoice)
+    dispatch(setSelectedInvoice(invoice))
     setIsModalOpen(true)
   }
 
@@ -142,7 +143,7 @@ const InvoiceList = () => {
                 >
                   <input
                     type="checkbox"
-                    checked={checkedItems.has(invoice.id)}
+                    checked={checkedInvoices.has(invoice.id)}
                     onChange={(e) => handleItemCheckboxChange(e.target.checked, invoice.id)}
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                   />
