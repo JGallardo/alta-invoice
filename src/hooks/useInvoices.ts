@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { mockInvoices } from '../__mocks__/InvoiceData'
 
 export interface Invoice {
-  id: string
+  id: number
   date: string
   vendor_name: string
   amount: number | null

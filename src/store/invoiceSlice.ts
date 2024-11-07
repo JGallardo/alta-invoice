@@ -6,7 +6,7 @@ interface InvoiceState {
   isLoading: boolean
   error: string | null
   selectedInvoice: Invoice | null
-  checkedInvoices: Set<string>
+  checkedInvoices: Set<number>
 }
 
 const initialState: InvoiceState = {
@@ -35,13 +35,13 @@ const invoiceSlice = createSlice({
     setSelectedInvoice: (state, action: PayloadAction<Invoice | null>) => {
       state.selectedInvoice = action.payload
     },
-    setCheckedInvoices: (state, action: PayloadAction<string[]>) => {
+    setCheckedInvoices: (state, action: PayloadAction<number[]>) => {
       state.checkedInvoices = new Set(action.payload)
     },
-    checkInvoice: (state, action: PayloadAction<string>) => {
+    checkInvoice: (state, action: PayloadAction<number>) => {
       state.checkedInvoices.add(action.payload)
     },
-    uncheckInvoice: (state, action: PayloadAction<string>) => {
+    uncheckInvoice: (state, action: PayloadAction<number>) => {
       state.checkedInvoices.delete(action.payload)
     },
     clearCheckedInvoices: (state) => {

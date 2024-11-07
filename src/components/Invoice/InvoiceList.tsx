@@ -65,7 +65,7 @@ const InvoiceList = () => {
   }
 
   // Handle individual checkbox change
-  const handleItemCheckboxChange = (checked: boolean, invoiceId: string) => {
+  const handleItemCheckboxChange = (checked: boolean, invoiceId: number) => {
     const newCheckedItems = new Set(checkedInvoices)
     if (checked) {
       newCheckedItems.add(invoiceId)

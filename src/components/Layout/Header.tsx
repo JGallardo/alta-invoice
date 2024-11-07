@@ -11,8 +11,16 @@ const Header = ({ userImg }: HeaderProps) => {
     
     const getPageName = () => {
       if (location.pathname === '/') return 'Home';
-      return location.pathname.substring(1).charAt(0).toUpperCase() + 
-             location.pathname.slice(2);
+      const segments = location.pathname.split('/').filter(Boolean);
+      return segments.map((segment, index) => {
+        const name = segment.charAt(0).toUpperCase() + segment.slice(1);
+        return index === segments.length - 1 ? name : (
+          <>
+            {name}
+            <span className="mx-2">/</span>
+          </>
+        );
+      });
     }
 
     const showBreadcrumb = location.pathname !== '/';
@@ -26,11 +34,11 @@ const Header = ({ userImg }: HeaderProps) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <div className="flex items-center space-x-2 text-gray-600">
+            <div className="flex items-center text-gray-600">
               {showBreadcrumb ? (
                 <>
                   <span>Home</span>
-                  <span>/</span>
+                  <span className="mx-2">/</span>
                   <span className="text-gray-900">{getPageName()}</span>
                 </>
               ) : (

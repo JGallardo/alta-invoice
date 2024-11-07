@@ -1,6 +1,6 @@
 export const mockInvoices = [
     {
-      id: '1',
+      id: 1,
       date: '09/11/23',
       vendor_name: 'Amazon',
       description: 'Rental',
@@ -9,7 +9,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '2',
+      id: 2,
       date: '09/11/23',
       vendor_name: 'Sysco',
       description: 'Rental',
@@ -18,7 +18,7 @@ export const mockInvoices = [
       paid: false
     },
     {
-      id: '3',
+      id: 3,
       date: '09/11/23',
       vendor_name: 'US Foods',
       description: 'Rental',
@@ -27,7 +27,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '4',
+      id: 4,
       date: '09/11/23',
       vendor_name: 'Retal Inc',
       description: 'Rental',
@@ -36,7 +36,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '5',
+      id: 5,
       date: '09/11/23',
       vendor_name: 'Fiber Optics',
       description: 'Rental',
@@ -45,7 +45,7 @@ export const mockInvoices = [
       paid: false
     },
     {
-      id: '6',
+      id: 6,
       date: '09/11/23',
       vendor_name: 'Ikea',
       description: 'Rental',
@@ -54,7 +54,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '7',
+      id: 7,
       date: '09/11/23',
       vendor_name: 'Costco',
       description: 'Rental',
@@ -63,7 +63,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '8',
+      id: 8,
       date: '09/11/23',
       vendor_name: 'Office Depot',
       description: 'Rental',
@@ -72,7 +72,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '9',
+      id: 9,
       date: '09/11/23',
       vendor_name: 'Sysco',
       description: 'Rental',
@@ -81,7 +81,7 @@ export const mockInvoices = [
       paid: false
     },
     {
-      id: '10',
+      id: 10,
       date: '09/11/23',
       vendor_name: 'Amazon',
       description: 'Rental',
@@ -90,7 +90,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '11',
+      id: 11,
       date: '09/11/23',
       vendor_name: 'Costco',
       description: 'Rental',
@@ -99,7 +99,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '12',
+      id: 12,
       date: '09/11/23',
       vendor_name: 'US Foods',
       description: 'Rental',
@@ -108,7 +108,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '13',
+      id: 13,
       date: '09/11/23',
       vendor_name: 'Sysco',
       description: 'Rental',
@@ -117,7 +117,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '14',
+      id: 14,
       date: '09/11/23',
       vendor_name: 'Office Depot',
       description: 'Rental',
@@ -126,7 +126,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '15',
+      id: 15,
       date: '09/11/23',
       vendor_name: 'Ikea',
       description: 'Rental',
@@ -135,7 +135,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '16',
+      id: 16,
       date: '09/11/23',
       vendor_name: 'Amazon',
       description: 'Rental',
@@ -144,7 +144,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '17',
+      id: 17,
       date: '09/11/23',
       vendor_name: 'Fiber Optics',
       description: 'Rental',
@@ -153,7 +153,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '18',
+      id: 18,
       date: '09/11/23',
       vendor_name: 'Sysco',
       description: 'Rental',
@@ -162,7 +162,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '19',
+      id: 19,
       date: '09/11/23',
       vendor_name: 'US Foods',
       description: 'Rental',
@@ -171,7 +171,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '20',
+      id: 20,
       date: '09/11/23',
       vendor_name: 'Costco',
       description: 'Rental',
@@ -180,7 +180,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '21',
+      id: 21,
       date: '09/11/23',
       vendor_name: 'Office Depot',
       description: 'Rental',
@@ -189,7 +189,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '22',
+      id: 22,
       date: '09/11/23',
       vendor_name: 'Amazon',
       description: 'Rental',
@@ -198,7 +198,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '23',
+      id: 23,
       date: '09/11/23',
       vendor_name: 'Ikea',
       description: 'Rental',
@@ -207,7 +207,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '24',
+      id: 24,
       date: '09/11/23',
       vendor_name: 'Sysco',
       description: 'Rental',
@@ -216,7 +216,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '25',
+      id: 25,
       date: '09/11/23',
       vendor_name: 'Fiber Optics',
       description: 'Rental',
@@ -225,7 +225,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '26',
+      id: 26,
       date: '09/11/23',
       vendor_name: 'US Foods',
       description: 'Rental',
@@ -234,7 +234,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '27',
+      id: 27,
       date: '09/11/23',
       vendor_name: 'Costco',
       description: 'Rental',
@@ -243,7 +243,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '28',
+      id: 28,
       date: '09/11/23',
       vendor_name: 'Office Depot',
       description: 'Rental',
@@ -252,7 +252,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '29',
+      id: 29,
       date: '09/11/23',
       vendor_name: 'Amazon',
       description: 'Rental',
@@ -261,7 +261,7 @@ export const mockInvoices = [
       paid: true
     },
     {
-      id: '30',
+      id: 30,
       date: '09/11/23',
       vendor_name: 'Ikea',
       description: 'Rental',
