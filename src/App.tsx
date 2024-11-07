@@ -4,6 +4,8 @@ import InvoiceList from './components/Invoice/InvoiceList'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
+import Bills from './pages/Bills'
+import Expenses from './pages/Expenses'
 
 function App() {
   return (
@@ -16,6 +18,16 @@ function App() {
           </Layout>
         } />
         <Route path="/" element={<Home />} />
+        <Route path="/bills" element={
+          <Layout>
+            <Bills />
+          </Layout>
+        } />
+        <Route path="/expenses" element={
+          <Layout>
+            <Expenses />
+          </Layout>
+        } />
         <Route path="/profile" element={
           <Layout>
             <div>Profile Page</div>
