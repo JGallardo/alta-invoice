@@ -1,12 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
     userImg?: string;
 }
 
 const Header = ({ userImg }: HeaderProps) => {
+    const location = useLocation();
     const defaultProfileImg = "https://randomuser.me/api/portraits/lego/3.jpg";
     const profileImage = userImg ?? defaultProfileImg;
+    
+    const getPageName = () => {
+      if (location.pathname === '/') return 'Home';
+      return location.pathname.substring(1).charAt(0).toUpperCase() + 
+             location.pathname.slice(2);
+    }
+
+    const showBreadcrumb = location.pathname !== '/';
     
     return (
       <header className="bg-white border-b px-6 py-4">
@@ -18,9 +27,15 @@ const Header = ({ userImg }: HeaderProps) => {
               </svg>
             </button>
             <div className="flex items-center space-x-2 text-gray-600">
-              <span>Home</span>
-              <span>/</span>
-              <span className="text-gray-900">Invoices</span>
+              {showBreadcrumb ? (
+                <>
+                  <span>Home</span>
+                  <span>/</span>
+                  <span className="text-gray-900">{getPageName()}</span>
+                </>
+              ) : (
+                <span>Home</span>
+              )}
             </div>
           </div>
           
