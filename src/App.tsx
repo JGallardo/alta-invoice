@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import InvoiceList from './components/Invoice/InvoiceList'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
@@ -14,35 +15,47 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/invoices/total" element={<NotFound />} />
         <Route path="/invoices/:id?" element={
-          <Layout>
-            <InvoiceList />
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <InvoiceList />
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="/" element={<Home />} />
         <Route path="/bills" element={
-          <Layout>
-            <Bills />
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <Bills />
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="/expenses" element={
-          <Layout>
-            <Expenses />
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <Expenses />
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="/profile" element={
-          <Layout>
-            <div>Profile Page</div>
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <div>Profile Page</div>
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="/settings" element={
-          <Layout>
-            <div>Settings Page</div>
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <div>Settings Page</div>
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="/notifications" element={
-          <Layout>
-            <div>Notifications Page</div>
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <div>Notifications Page</div>
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>

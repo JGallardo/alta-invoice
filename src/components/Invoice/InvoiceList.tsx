@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../../utils/axios'
 import { setInvoices } from '../../store/invoiceSlice'
 import type { RootState } from '../../store/store'
 import type { Invoice } from '../../hooks/useInvoices'
@@ -27,13 +27,13 @@ const InvoiceList = () => {
     const fetchInvoices = async () => {
       try {
         if (!inDevelopment) {
-          const response = await axios.get(`http://localhost:3000/invoices?page=${currentPage}&limit=${itemsPerPage}`)
+          const response = await api.get(`/invoices?page=${currentPage}&limit=${itemsPerPage}`)
           dispatch(setInvoices(response.data.data))
           setTotalItems(response.data.meta.total)
 
           if (id) {
             try {
-              const invoiceResponse = await axios.get(`http://localhost:3000/invoices/${id}`)
+              const invoiceResponse = await api.get(`/invoices/${id}`)
               setSelectedInvoice(invoiceResponse.data)
               setIsModalOpen(true)
             } catch {

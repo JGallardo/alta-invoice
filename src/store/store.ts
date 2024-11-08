@@ -4,8 +4,8 @@ import invoiceReducer from './invoiceSlice'
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
-    invoice: invoiceReducer
+    invoice: invoiceReducer,
+    auth: authReducer
   }
 })
 

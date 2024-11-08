@@ -1,18 +1,24 @@
-import { ReactNode } from 'react'
-import Sidebar from './Sidebar.tsx'
-import Header from './Header.tsx'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import Header from './Header'
+import Sidebar from './Sidebar'
+import { logout } from '../../store/authSlice'
 
-interface LayoutProps {
-  children: ReactNode
-}
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-const Layout = ({ children }: LayoutProps) => {
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/login')
+  }
+
   return (
-    <div className="flex h-screen bg-gray-50">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+    <div className="h-screen flex flex-col">
+      <Header onLogout={handleLogout} />
+      <div className="flex-1 flex overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto bg-gray-100 p-6">
           {children}
         </main>
       </div>

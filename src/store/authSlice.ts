@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+interface User {
+  id: number
+  email: string
+  name: string
+}
+
 interface AuthState {
   user: User | null
   token: string | null
   isAuthenticated: boolean
 }
 
-interface User {
-  id: string
-  email: string
-  name: string
-}
-
 const initialState: AuthState = {
   user: null,
-  token: null,
-  isAuthenticated: false
+  token: localStorage.getItem('token'),
+  isAuthenticated: !!localStorage.getItem('token')
 }
 
 const authSlice = createSlice({
@@ -29,11 +29,13 @@ const authSlice = createSlice({
       state.user = action.payload.user
       state.token = action.payload.token
       state.isAuthenticated = true
+      localStorage.setItem('token', action.payload.token)
     },
     logout: (state) => {
       state.user = null
       state.token = null
       state.isAuthenticated = false
+      localStorage.removeItem('token')
     }
   }
 })
