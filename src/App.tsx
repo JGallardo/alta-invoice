@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import InvoiceList from './components/Invoice/InvoiceList'
-import InvoiceDetail from './components/Invoice/InvoiceDetail'
 import InvoiceTotal from './components/Invoice/InvoiceTotal'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
@@ -19,12 +18,7 @@ function App() {
             <InvoiceTotal />
           </Layout>
         } />
-        <Route path="/invoices/:id" element={
-          <Layout>
-            <InvoiceDetail />
-          </Layout>
-        } />
-        <Route path="/invoices" element={
+        <Route path="/invoices/:id?" element={
           <Layout>
             <InvoiceList />
           </Layout>
