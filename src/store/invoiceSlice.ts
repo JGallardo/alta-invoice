@@ -6,7 +6,7 @@ interface InvoiceState {
   isLoading: boolean
   error: string | null
   selectedInvoice: Invoice | null
-  checkedInvoices: Set<number>
+  checkedInvoices: number[]
 }
 
 const initialState: InvoiceState = {
@@ -14,7 +14,7 @@ const initialState: InvoiceState = {
   isLoading: true,
   error: null,
   selectedInvoice: null,
-  checkedInvoices: new Set()
+  checkedInvoices: []
 }
 
 const invoiceSlice = createSlice({
@@ -36,16 +36,18 @@ const invoiceSlice = createSlice({
       state.selectedInvoice = action.payload
     },
     setCheckedInvoices: (state, action: PayloadAction<number[]>) => {
-      state.checkedInvoices = new Set(action.payload)
+      state.checkedInvoices = action.payload
     },
     checkInvoice: (state, action: PayloadAction<number>) => {
-      state.checkedInvoices.add(action.payload)
+      if (!state.checkedInvoices.includes(action.payload)) {
+        state.checkedInvoices.push(action.payload)
+      }
     },
     uncheckInvoice: (state, action: PayloadAction<number>) => {
-      state.checkedInvoices.delete(action.payload)
+      state.checkedInvoices = state.checkedInvoices.filter(id => id !== action.payload)
     },
     clearCheckedInvoices: (state) => {
-      state.checkedInvoices.clear()
+      state.checkedInvoices = []
     }
   }
 })

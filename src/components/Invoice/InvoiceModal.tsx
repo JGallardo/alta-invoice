@@ -24,6 +24,11 @@ const InvoiceModal = ({ isOpen, onClose, invoice }: InvoiceModalProps) => {
         
         <div className="space-y-4">
           <div>
+            <label className="text-sm text-gray-500">Invoice ID</label>
+            <p className="font-medium">{invoice.id}</p>
+          </div>
+
+          <div>
             <label className="text-sm text-gray-500">Date</label>
             <p className="font-medium">{invoice.date}</p>
           </div>

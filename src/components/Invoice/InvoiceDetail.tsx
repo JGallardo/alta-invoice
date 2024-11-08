@@ -1,60 +1,33 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import type { RootState } from '../../store/store'
-import { useEffect } from 'react'
-import { setInvoices, setError } from '../../store/invoiceSlice'
-import { mockInvoices } from '../../__mocks__/InvoiceData'
-
-// During development, set to True to use mockdata.
-const inDevelopment = true
+import axios from 'axios'
+import type { Invoice } from '../../hooks/useInvoices'
 
 const InvoiceDetail = () => {
-  const params = useParams<{ id: string }>()
-  const numericId = parseInt(params.id || '', 10)
-  const dispatch = useDispatch()
-  const { invoices, isLoading } = useSelector((state: RootState) => state.invoice)
-  
+  const { id } = useParams<{ id: string }>()
+  const [invoice, setInvoice] = useState<Invoice | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const fetchInvoice = async () => {
       try {
-        if (inDevelopment) {
-          if (!mockInvoices || mockInvoices.length === 0) {
-            dispatch(setError('You are in Development mode, but data is missing from the mockdata file'))
-            return
-          }
-          dispatch(setInvoices(mockInvoices))
-          return
-        }
-        dispatch(setError('Data could not be loaded. Please contact support.'))
+        const response = await axios.get(`http://localhost:3000/invoices/${id}`)
+        setInvoice(response.data)
+        setLoading(false)
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to load invoices. Please try again later.'
-        dispatch(setError(errorMessage))
+        setError('An invoice with that number does not exist')
+        setLoading(false)
+        console.error('Error fetching invoice:', err)
       }
     }
 
-    fetchInvoices()
-  }, [dispatch])
+    fetchInvoice()
+  }, [id])
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-full">
-        <p className="text-xl text-gray-600">Loading...</p>
-      </div>
-    )
-  }
-
-  const invoice = invoices.find(inv => inv.id === numericId)
-
-  if (!invoice) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-full">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Invoice Not Found</h1>
-        <p className="text-xl text-gray-600 text-center">
-          The requested invoice could not be found.
-        </p>
-      </div>
-    )
-  }
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>{error}</div>
+  if (!invoice) return <div>Invoice not found</div>
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
@@ -101,4 +74,4 @@ const InvoiceDetail = () => {
   )
 }
 
-export default InvoiceDetail 
+export default InvoiceDetail

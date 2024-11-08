@@ -1,110 +1,70 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { mockInvoices } from '../../__mocks__/InvoiceData'
+import axios from 'axios'
+import { setInvoices } from '../../store/invoiceSlice'
+import type { RootState } from '../../store/store'
 import type { Invoice } from '../../hooks/useInvoices'
 import InvoiceModal from './InvoiceModal'
-import { 
-  setInvoices, 
-  setError, 
-  setSelectedInvoice,
-  setCheckedInvoices,
-  clearCheckedInvoices
-} from '../../store/invoiceSlice'
-import type { RootState } from '../../store/store'
 
-// During development, set to True to use mockdata.
-const inDevelopment = true
+const inDevelopment = false
 
 const InvoiceList = () => {
   const dispatch = useDispatch()
-  const { invoices, isLoading, error, selectedInvoice, checkedInvoices } = 
-    useSelector((state: RootState) => state.invoice)
-  
+  const { invoices } = useSelector((state: RootState) => state.invoice)
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalItems, setTotalItems] = useState(0)
+  const [checkedIds, setCheckedIds] = useState<number[]>([])
   const itemsPerPage = 10
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
   const [headerChecked, setHeaderChecked] = useState(false)
 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        if (inDevelopment) {
-          if (!mockInvoices || mockInvoices.length === 0) {
-            dispatch(setError('You are in Development mode, but data is missing from the mockdata file'))
-            return
-          }
-          dispatch(setInvoices(mockInvoices))
-          return
+        if (!inDevelopment) {
+          const response = await axios.get(`http://localhost:3000/invoices?page=${currentPage}&limit=${itemsPerPage}`)
+          dispatch(setInvoices(response.data.data))
+          setTotalItems(response.data.meta.total)
         }
-        dispatch(setError('Data could not be loaded. Please contact support.'))
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to load invoices. Please try again later.'
-        dispatch(setError(errorMessage))
+        console.error('Failed to fetch invoices:', err)
       }
     }
 
     fetchInvoices()
-  }, [dispatch])
+  }, [dispatch, currentPage])
 
-  // Calculate pagination
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
   const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = invoices.slice(indexOfFirstItem, indexOfLastItem)
-  const totalPages = Math.ceil(invoices.length / itemsPerPage)
+  const indexOfFirstItem = (currentPage - 1) * itemsPerPage
 
-  // Handle header checkbox change
   const handleHeaderCheckboxChange = (checked: boolean) => {
     setHeaderChecked(checked)
     if (checked) {
-      const newCheckedItems = Array.from(checkedInvoices)
-      currentItems.forEach(item => newCheckedItems.push(item.id))
-      dispatch(setCheckedInvoices(newCheckedItems))
+      const newCheckedIds = invoices.map(item => item.id)
+      setCheckedIds(newCheckedIds)
     } else {
-      dispatch(clearCheckedInvoices())
+      setCheckedIds([])
     }
   }
 
-  // Handle individual checkbox change
   const handleItemCheckboxChange = (checked: boolean, invoiceId: number) => {
-    const newCheckedItems = new Set(checkedInvoices)
-    if (checked) {
-      newCheckedItems.add(invoiceId)
-    } else {
-      newCheckedItems.delete(invoiceId)
-    }
-    dispatch(setCheckedInvoices(Array.from(newCheckedItems)))
+    setCheckedIds(prev => {
+      if (checked) {
+        return [...prev, invoiceId]
+      } else {
+        return prev.filter(id => id !== invoiceId)
+      }
+    })
     
-    // Update header checkbox state
-    const allCurrentChecked = currentItems.every(item => newCheckedItems.has(item.id))
+    const allCurrentChecked = invoices.every(item => checkedIds.includes(item.id))
     setHeaderChecked(allCurrentChecked)
   }
 
-  // Handle page changes
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
-    setHeaderChecked(false)
-  }
-
-  // Handle row click
   const handleRowClick = (invoice: Invoice) => {
-    dispatch(setSelectedInvoice(invoice))
+    setSelectedInvoice(invoice)
     setIsModalOpen(true)
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-full">
-        <p className="text-xl text-gray-600">Loading...</p>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-full">
-        <p className="text-xl text-gray-600">{error}</p>
-      </div>
-    )
   }
 
   return (
@@ -130,20 +90,18 @@ const InvoiceList = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {currentItems.map((invoice) => (
+            {invoices.map((invoice) => (
               <tr 
                 key={invoice.id}
                 className="cursor-pointer hover:bg-gray-50"
               >
                 <td 
                   className="px-6 py-4 whitespace-nowrap"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <input
                     type="checkbox"
-                    checked={checkedInvoices.has(invoice.id)}
+                    checked={checkedIds.includes(invoice.id)}
                     onChange={(e) => handleItemCheckboxChange(e.target.checked, invoice.id)}
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                   />
@@ -192,20 +150,26 @@ const InvoiceList = () => {
       <div className="flex justify-between items-center bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
         <div className="flex items-center">
           <p className="text-sm text-gray-700">
-            Showing{' '}
-            <span className="font-medium">{indexOfFirstItem + 1}</span>
-            {' '}-{' '}
-            <span className="font-medium">
-              {Math.min(indexOfLastItem, invoices.length)}
-            </span>
-            {' '}of{' '}
-            <span className="font-medium">{invoices.length}</span>
-            {' '}results
+            {totalItems > 0 ? (
+              <>
+                Showing{' '}
+                <span className="font-medium">{indexOfFirstItem + 1}</span>
+                {' '}-{' '}
+                <span className="font-medium">
+                  {Math.min(indexOfLastItem, totalItems)}
+                </span>
+                {' '}of{' '}
+                <span className="font-medium">{totalItems}</span>
+                {' '}results
+              </>
+            ) : (
+              'No results'
+            )}
           </p>
         </div>
         <div className="flex space-x-2">
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             className={`px-3 py-1 rounded-md ${
               currentPage === 1
@@ -218,7 +182,7 @@ const InvoiceList = () => {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
-              onClick={() => handlePageChange(page)}
+              onClick={() => setCurrentPage(page)}
               className={`px-3 py-1 rounded-md ${
                 currentPage === page
                   ? 'bg-gray-800 text-white'
@@ -229,7 +193,7 @@ const InvoiceList = () => {
             </button>
           ))}
           <button
-            onClick={() => handlePageChange(currentPage + 1)}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
             className={`px-3 py-1 rounded-md ${
               currentPage === totalPages
