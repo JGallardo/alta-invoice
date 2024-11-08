@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import InvoiceList from './components/Invoice/InvoiceList'
-import InvoiceTotal from './components/Invoice/InvoiceTotal'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
@@ -13,11 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/invoices/total" element={
-          <Layout>
-            <InvoiceTotal />
-          </Layout>
-        } />
+        <Route path="/invoices/total" element={<NotFound />} />
         <Route path="/invoices/:id?" element={
           <Layout>
             <InvoiceList />

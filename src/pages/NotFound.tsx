@@ -5,10 +5,10 @@ const NotFound = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
       <p className="text-xl text-gray-600 mb-2 text-center">
-        This page is down for maintenance.
+        This page does not exist.
       </p>
       <p className="text-xl text-gray-600 mb-8 text-center">
-        Please check back later or contact support.
+        If you feel this is an error, contact support.
       </p>
       <Link 
         to="/" 
